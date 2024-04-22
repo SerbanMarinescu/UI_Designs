@@ -31,6 +31,7 @@ import com.example.canvasdesigns.screens.clock_screen.ClockViewModel
 import com.example.canvasdesigns.screens.main_screen.MainScreen
 import com.example.canvasdesigns.screens.main_screen.MainViewModel
 import com.example.canvasdesigns.screens.main_screen.NavRouteId
+import com.example.canvasdesigns.screens.piano_screen.Piano
 import com.example.canvasdesigns.screens.weight_picker_screen.Scale
 import com.example.canvasdesigns.screens.weight_picker_screen.ScaleViewModel
 
@@ -49,6 +50,7 @@ fun Navigation(navController: NavHostController) {
                     when(id) {
                         NavRouteId.CLOCK -> navController.navigate(Screen.ClockScreen.route)
                         NavRouteId.SCALE -> navController.navigate(Screen.WeightPickerScreen.route)
+                        NavRouteId.PIANO -> navController.navigate(Screen.PianoScreen.route)
                     }
                 }
             )
@@ -111,6 +113,11 @@ fun Navigation(navController: NavHostController) {
                         .align(Alignment.Center),
                     curTime = state.curTime
                 )
+            }
+        }
+        composable(Screen.PianoScreen.route) {
+            Box(modifier = Modifier.fillMaxSize()) {
+                Piano(modifier = Modifier.fillMaxWidth().height(500.dp).align(Alignment.Center))
             }
         }
     }

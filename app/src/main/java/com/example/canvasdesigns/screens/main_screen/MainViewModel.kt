@@ -20,6 +20,11 @@ class MainViewModel : ViewModel() {
                 resId = R.drawable.clock,
                 name = "Clock",
                 navRouteId = NavRouteId.CLOCK
+            ),
+            DesignThumbnails(
+                resId = R.drawable.piano,
+                name = "Piano",
+                navRouteId = NavRouteId.PIANO
             )
         )
 
