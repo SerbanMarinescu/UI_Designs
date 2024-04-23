@@ -3,7 +3,10 @@ package com.example.canvasdesigns.screens.piano_screen
 import android.content.res.Configuration.ORIENTATION_LANDSCAPE
 import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.graphics.Paint
+import android.media.MediaPlayer
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -29,17 +32,26 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.canvasdesigns.R
+import kotlinx.coroutines.delay
 import kotlin.math.log
 
+@RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 @Composable
 fun Piano(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
 
     val configuration = LocalConfiguration.current
+    val context = LocalContext.current
+
+    val state by remember {
+        mutableStateOf(PianoState())
+    }
 
     var dragAmountX by remember {
         mutableFloatStateOf(0f)
@@ -57,64 +69,87 @@ fun Piano(
         mutableFloatStateOf(0f)
     }
 
-    var whiteKeyDimensions by remember {
+    var whiteKeyOffset by remember {
         mutableStateOf(Pair(0f, 0f))
     }
 
-    var blackKeyDimensions by remember {
+    var blackKeyOffset by remember {
         mutableStateOf(Pair(0f, 0f))
+    }
+
+    var keyPressed by remember {
+        mutableStateOf(false)
     }
 
     LaunchedEffect(key1 = dragAmountX) {
         whiteKeys = generateWhiteKeys(
-            keyWidth = whiteKeyDimensions.first,
-            keyHeight = whiteKeyDimensions.second,
+            keyPositionX = whiteKeyOffset.first,
+            keyPositionY = whiteKeyOffset.second,
             dragOffsetX = dragAmountX,
-            canvasHeight = canvasHeight
+            canvasHeight = canvasHeight,
+            keyWidth = state.whiteKeyWidth,
+            keyHeight = state.whiteKeyHeight
         )
 
         blackKeys = generateBlackKeys(
-            keyWidth = blackKeyDimensions.first,
-            keyHeight = blackKeyDimensions.second,
+            keyPositionX = blackKeyOffset.first,
+            keyPositionY = blackKeyOffset.second,
             dragOffsetX = dragAmountX,
-            canvasHeight = canvasHeight
+            canvasHeight = canvasHeight,
+            keyWidth = state.blackKeyWidth,
+            keyHeight = state.blackKeyHeight
         )
     }
 
     Canvas(
         modifier = modifier
-            .applyIf(configuration.orientation == ORIENTATION_LANDSCAPE, Modifier.padding(top = 200.dp))
+            .applyIf(
+                configuration.orientation == ORIENTATION_LANDSCAPE,
+                Modifier.padding(top = 200.dp)
+            )
             .pointerInput(Unit) {
-            detectDragGestures { change, _ ->
+                detectDragGestures { change, _ ->
 
-                dragAmountX += change.positionChange().x
-                dragAmountX = dragAmountX.coerceIn(
-                    minimumValue = if(configuration.orientation == ORIENTATION_PORTRAIT) -2370f else -1220f,
-                    maximumValue = 0f
-                )
+                    dragAmountX += change.positionChange().x
+                    dragAmountX = dragAmountX.coerceIn(
+                        minimumValue = if (configuration.orientation == ORIENTATION_PORTRAIT) -2400f else -1410f,
+                        maximumValue = 0f
+                    )
+                }
             }
-        }
             .pointerInput(Unit) {
                 detectTapGestures { tapPosition ->
 
                     blackKeys.forEachIndexed { index, key ->
-                        if(
+                        if (
                             tapPosition.x <= key.right &&
                             tapPosition.x >= key.left &&
                             tapPosition.y <= key.bottom &&
                             tapPosition.y >= key.top
                         ) {
+                            val noteId = mapBlackKeyToNote(index)
+                            val mediaPlayer = MediaPlayer.create(context, noteId)
+                            mediaPlayer.setOnCompletionListener {
+                                mediaPlayer.release()
+                            }
+                            mediaPlayer.start()
                             return@detectTapGestures
                         }
                     }
 
-                    whiteKeys.forEachIndexed  { index, key ->
-                        if(
+                    whiteKeys.forEachIndexed { index, key ->
+                        if (
                             tapPosition.x <= key.right &&
                             tapPosition.x >= key.left &&
                             tapPosition.y <= key.bottom &&
                             tapPosition.y >= key.top
                         ) {
+                            val noteId = mapWhiteKeyToNote(index)
+                            val mediaPlayer = MediaPlayer.create(context, noteId)
+                            mediaPlayer.setOnCompletionListener {
+                                mediaPlayer.release()
+                            }
+                            mediaPlayer.start()
                             return@forEachIndexed
                         }
                     }
@@ -125,8 +160,8 @@ fun Piano(
         val height = size.height
 
         canvasHeight = height
-        whiteKeyDimensions = Pair(60.dp.toPx(), 200.dp.toPx() - 200f)
-        blackKeyDimensions = Pair(60.dp.toPx(), 200.dp.toPx() - 198f)
+        whiteKeyOffset = Pair(60.dp.toPx(), 200.dp.toPx() - 200f)
+        blackKeyOffset = Pair(60.dp.toPx(), 200.dp.toPx() - 198f)
 
         drawRect(
             topLeft = Offset(
@@ -157,56 +192,6 @@ fun Piano(
             )
         }
 
-//        for(i in 0..20) {
-//            val topLeft = Offset(
-//                x = i * 60.dp.toPx() + dragAmountX,
-//                y = height / 2  - 200.dp.toPx() + 200f
-//            )
-//
-//            whiteKeys += Rect(
-//                topLeft = topLeft,
-//                bottomRight = Offset(
-//                    x = topLeft.x + 150f,
-//                    y = topLeft.y + 400f
-//                )
-//            )
-//
-//            drawRect(
-//                topLeft = topLeft,
-//                color = Color.White,
-//                size = Size(150f, 400f)
-//            )
-//
-//            drawContext.canvas.nativeCanvas.apply {
-//                drawText(
-//                    i.toString(),
-//                    i * 60.dp.toPx() + dragAmountX,
-//                    height / 2  - 200.dp.toPx() + 500f,
-//                    android.graphics.Paint().apply {
-//                        textSize = 20.sp.toPx()
-//                    }
-//                )
-//            }
-//        }
-
-//        for(i in 0..19) {
-//
-//            if(i == 2 || i == 6 || i == 9 || i == 13 || i == 16) {
-//                continue
-//            }
-//
-//            val topLeft = Offset(
-//                x = i * 60.dp.toPx() + 120f + dragAmountX,
-//                y = height / 2  - 200.dp.toPx() + 198f
-//            )
-//
-//            drawRect(
-//                topLeft = topLeft,
-//                color = Color.Black,
-//                size = Size(80f, 220f)
-//            )
-//        }
-
         blackKeys.forEach {
             drawRect(
                 topLeft = it.topLeft,
@@ -214,86 +199,18 @@ fun Piano(
                 color = Color.Black
             )
         }
-    }
-}
 
-private fun generateWhiteKeys(
-    keyWidth: Float,
-    keyHeight: Float,
-    dragOffsetX: Float,
-    canvasHeight: Float
-): List<Rect> {
-
-    val whiteKeys = mutableListOf<Rect>()
-    whiteKeys.clear()
-
-    for (i in 0..20) {
-        val topLeft = Offset(
-            x = i * keyWidth + dragOffsetX,
-            y = canvasHeight / 2 - keyHeight
-        )
-
-        whiteKeys.add(
-            Rect(
-                topLeft = topLeft,
-                bottomRight = Offset(
-                    x = topLeft.x + 150f,
-                    y = topLeft.y + 400f
-                )
+        drawContext.canvas.nativeCanvas.apply {
+            drawText(
+                "C4",
+                7 * whiteKeyOffset.first + 30f + dragAmountX,
+                canvasHeight / 2 + 30f,
+                Paint().apply {
+                    textSize = 15.sp.toPx()
+                }
             )
-        )
-    }
-
-    return whiteKeys
-}
-
-fun Modifier.applyIf(condition: Boolean, modifier: Modifier): Modifier {
-    return if(condition) {
-        then(modifier)
-    } else {
-        this
-    }
-}
-private fun generateBlackKeys(
-    keyWidth: Float,
-    keyHeight: Float,
-    dragOffsetX: Float,
-    canvasHeight: Float
-): List<Rect> {
-
-    var blackKeys = mutableListOf<Rect>()
-    blackKeys.clear()
-
-    for(i in 0..19) {
-
-        if(i == 2 || i == 6 || i == 9 || i == 13 || i == 16) {
-            continue
         }
-
-        val topLeft = Offset(
-            x = i * keyWidth + 120f + dragOffsetX,
-            y = canvasHeight / 2  - keyHeight
-        )
-
-        blackKeys.add(
-            Rect(
-                topLeft = topLeft,
-                bottomRight = Offset(
-                    x = topLeft.x + 80f,
-                    y = topLeft.y + 220f
-                )
-            )
-        )
-    }
-    return blackKeys
-}
-@Preview(showBackground = true)
-@Composable
-private fun PianoPreview() {
-    Box(modifier = Modifier.fillMaxSize()) {
-        Piano(modifier = Modifier
-            .fillMaxWidth()
-            .height(500.dp)
-            .align(Alignment.Center))
     }
 }
+
+
