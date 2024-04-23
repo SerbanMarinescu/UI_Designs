@@ -77,10 +77,6 @@ fun Piano(
         mutableStateOf(Pair(0f, 0f))
     }
 
-    var keyPressed by remember {
-        mutableStateOf(false)
-    }
-
     LaunchedEffect(key1 = dragAmountX) {
         whiteKeys = generateWhiteKeys(
             keyPositionX = whiteKeyOffset.first,
