@@ -7,10 +7,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,6 +26,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.canvasdesigns.screens.clock_screen.Clock
 import com.example.canvasdesigns.screens.clock_screen.ClockViewModel
+import com.example.canvasdesigns.screens.gender_picker_screen.GenderPickerScreen
 import com.example.canvasdesigns.screens.main_screen.MainScreen
 import com.example.canvasdesigns.screens.main_screen.MainViewModel
 import com.example.canvasdesigns.screens.main_screen.NavRouteId
@@ -51,6 +50,7 @@ fun Navigation(navController: NavHostController) {
                         NavRouteId.CLOCK -> navController.navigate(Screen.ClockScreen.route)
                         NavRouteId.SCALE -> navController.navigate(Screen.WeightPickerScreen.route)
                         NavRouteId.PIANO -> navController.navigate(Screen.PianoScreen.route)
+                        NavRouteId.GENDER -> navController.navigate(Screen.GenderPickerScreen.route)
                     }
                 }
             )
@@ -117,8 +117,15 @@ fun Navigation(navController: NavHostController) {
         }
         composable(Screen.PianoScreen.route) {
             Box(modifier = Modifier.fillMaxSize()) {
-                Piano(modifier = Modifier.fillMaxWidth().height(500.dp).align(Alignment.Center))
+                Piano(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(500.dp)
+                    .align(Alignment.Center))
             }
+        }
+        composable(Screen.GenderPickerScreen.route) {
+
+            GenderPickerScreen()
         }
     }
 }

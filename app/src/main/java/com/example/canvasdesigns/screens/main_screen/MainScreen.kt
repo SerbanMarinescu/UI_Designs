@@ -6,8 +6,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.pager.HorizontalPager
@@ -35,18 +39,35 @@ fun MainScreen(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        HorizontalPager(
-            state = pagerState,
-            modifier = Modifier.fillMaxWidth().align(Alignment.Center)
-        ) { currentPage ->
+//        HorizontalPager(
+//            state = pagerState,
+//            modifier = Modifier.fillMaxWidth().align(Alignment.Center)
+//        ) { currentPage ->
+//
+//            ImageCard(
+//                resId = itemList[currentPage % itemList.size].resId,
+//                name = itemList[currentPage % itemList.size].name,
+//                onClick = {
+//                    navigateTo(itemList[currentPage % itemList.size].navRouteId)
+//                }
+//            )
+//        }
 
-            ImageCard(
-                resId = itemList[currentPage % itemList.size].resId,
-                name = itemList[currentPage % itemList.size].name,
-                onClick = {
-                    navigateTo(itemList[currentPage % itemList.size].navRouteId)
-                }
-            )
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 30.dp)
+        ) {
+            items(itemList) {
+                ImageCard(
+                    resId = it.resId,
+                    name = it.name,
+                    onClick = {
+                        navigateTo(it.navRouteId)
+                    }
+                )
+            }
         }
     }
 }

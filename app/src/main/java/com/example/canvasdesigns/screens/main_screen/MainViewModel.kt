@@ -25,6 +25,11 @@ class MainViewModel : ViewModel() {
                 resId = R.drawable.piano,
                 name = "Piano",
                 navRouteId = NavRouteId.PIANO
+            ),
+            DesignThumbnails(
+                resId = R.drawable.gender,
+                name = "Gender Picker",
+                navRouteId = NavRouteId.GENDER
             )
         )
 

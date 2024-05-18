@@ -37,44 +37,6 @@ fun ImageCard(
     name: String,
     onClick: () -> Unit
 ) {
-//    Box(
-//        modifier = modifier
-//            .size(200.dp)
-//            .clip(RoundedCornerShape(20.dp))
-//            .background(Color.LightGray)
-//            .clickable {
-//                onClick()
-//            }
-//    ) {
-//
-//        Column(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .padding(top = 10.dp),
-//            horizontalAlignment = Alignment.CenterHorizontally,
-//            verticalArrangement = Arrangement.SpaceBetween
-//        ) {
-//            Text(
-//                text = name,
-//                fontSize = 25.sp,
-//                fontWeight = FontWeight.Bold
-//            )
-//
-//            Box(
-//                modifier = Modifier
-//                    .size(170.dp)
-//                    .padding(15.dp)
-//                    .clip(RoundedCornerShape(10.dp))
-//            ) {
-//                Image(
-//                    painter = painterResource(id = resId),
-//                    contentDescription = null,
-//                    modifier = Modifier.fillMaxSize(),
-//                    contentScale = ContentScale.Crop
-//                )
-//            }
-//        }
-//    }
 
     Card(
         modifier = Modifier
@@ -101,7 +63,7 @@ fun ImageCard(
             Box(
                 modifier = modifier
                     .fillMaxWidth()
-                    .height(200.dp)
+                    .size(100.dp)
                     .padding(10.dp)
             ) {
                 Image(
