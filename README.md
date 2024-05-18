@@ -11,8 +11,8 @@
 
     <br />
     <h3>
-                Piano Screen
+                Piano                                                Gender Picker                  
         
-<img width="391" alt="piano" src="https://github.com/SerbanMarinescu/Tasky/assets/112426038/863f7b49-1096-4544-bbed-762781d7bb4b">
+<img width="391" alt="piano" src="https://github.com/SerbanMarinescu/Tasky/assets/112426038/863f7b49-1096-4544-bbed-762781d7bb4b">              <img width="391" alt="gender" src="https://github.com/SerbanMarinescu/UI_Designs/assets/112426038/4dce3913-2008-4b08-a751-507823c6c45f">
     </h3>
 </pre>
