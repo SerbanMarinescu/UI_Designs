@@ -27,6 +27,7 @@ import androidx.navigation.compose.composable
 import com.example.canvasdesigns.screens.clock_screen.Clock
 import com.example.canvasdesigns.screens.clock_screen.ClockViewModel
 import com.example.canvasdesigns.screens.gender_picker_screen.GenderPickerScreen
+import com.example.canvasdesigns.screens.image_reveal_screen.ImageReveal
 import com.example.canvasdesigns.screens.main_screen.MainScreen
 import com.example.canvasdesigns.screens.main_screen.MainViewModel
 import com.example.canvasdesigns.screens.main_screen.NavRouteId
@@ -54,6 +55,7 @@ fun Navigation(navController: NavHostController) {
                         NavRouteId.PIANO -> navController.navigate(Screen.PianoScreen.route)
                         NavRouteId.GENDER -> navController.navigate(Screen.GenderPickerScreen.route)
                         NavRouteId.TICTACTOE -> navController.navigate(Screen.TicTacToeScreen.route)
+                        NavRouteId.IMAGE_REVEAL -> navController.navigate(Screen.ImageRevealScreen.route)
                     }
                 }
             )
@@ -130,7 +132,6 @@ fun Navigation(navController: NavHostController) {
 
             GenderPickerScreen()
         }
-
         composable(Screen.TicTacToeScreen.route) {
             val viewModel = viewModel<TicTacToeViewModel>()
             val state by viewModel.state.collectAsStateWithLifecycle()
@@ -141,6 +142,9 @@ fun Navigation(navController: NavHostController) {
                 onEvent = viewModel::onEvent,
                 score = score
             )
+        }
+        composable(Screen.ImageRevealScreen.route) {
+            ImageReveal()
         }
     }
 }

@@ -35,6 +35,11 @@ class MainViewModel : ViewModel() {
                 resId = R.drawable.tictactoe,
                 name = "TicTacToe",
                 navRouteId = NavRouteId.TICTACTOE
+            ),
+            DesignThumbnails(
+                resId = R.drawable.image_reveal,
+                name = "Image Reveal",
+                navRouteId = NavRouteId.IMAGE_REVEAL
             )
         )
 

@@ -5,5 +5,6 @@ enum class NavRouteId {
     SCALE,
     PIANO,
     GENDER,
-    TICTACTOE
+    TICTACTOE,
+    IMAGE_REVEAL
 }
