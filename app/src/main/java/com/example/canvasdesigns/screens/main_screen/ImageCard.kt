@@ -63,7 +63,7 @@ fun ImageCard(
             Box(
                 modifier = modifier
                     .fillMaxWidth()
-                    .size(100.dp)
+                    .size(150.dp)
                     .padding(10.dp)
             ) {
                 Image(

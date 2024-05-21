@@ -31,6 +31,8 @@ import com.example.canvasdesigns.screens.main_screen.MainScreen
 import com.example.canvasdesigns.screens.main_screen.MainViewModel
 import com.example.canvasdesigns.screens.main_screen.NavRouteId
 import com.example.canvasdesigns.screens.piano_screen.Piano
+import com.example.canvasdesigns.screens.tic_tac_toe_screen.TicTacToe
+import com.example.canvasdesigns.screens.tic_tac_toe_screen.TicTacToeViewModel
 import com.example.canvasdesigns.screens.weight_picker_screen.Scale
 import com.example.canvasdesigns.screens.weight_picker_screen.ScaleViewModel
 
@@ -51,6 +53,7 @@ fun Navigation(navController: NavHostController) {
                         NavRouteId.SCALE -> navController.navigate(Screen.WeightPickerScreen.route)
                         NavRouteId.PIANO -> navController.navigate(Screen.PianoScreen.route)
                         NavRouteId.GENDER -> navController.navigate(Screen.GenderPickerScreen.route)
+                        NavRouteId.TICTACTOE -> navController.navigate(Screen.TicTacToeScreen.route)
                     }
                 }
             )
@@ -126,6 +129,18 @@ fun Navigation(navController: NavHostController) {
         composable(Screen.GenderPickerScreen.route) {
 
             GenderPickerScreen()
+        }
+
+        composable(Screen.TicTacToeScreen.route) {
+            val viewModel = viewModel<TicTacToeViewModel>()
+            val state by viewModel.state.collectAsStateWithLifecycle()
+            val score = viewModel.score
+
+            TicTacToe(
+                state = state,
+                onEvent = viewModel::onEvent,
+                score = score
+            )
         }
     }
 }

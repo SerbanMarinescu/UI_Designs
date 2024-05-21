@@ -4,5 +4,6 @@ enum class NavRouteId {
     CLOCK,
     SCALE,
     PIANO,
-    GENDER
+    GENDER,
+    TICTACTOE
 }

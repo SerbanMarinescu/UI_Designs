@@ -30,6 +30,11 @@ class MainViewModel : ViewModel() {
                 resId = R.drawable.gender,
                 name = "Gender Picker",
                 navRouteId = NavRouteId.GENDER
+            ),
+            DesignThumbnails(
+                resId = R.drawable.tictactoe,
+                name = "TicTacToe",
+                navRouteId = NavRouteId.TICTACTOE
             )
         )
 
